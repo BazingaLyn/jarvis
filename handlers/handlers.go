@@ -27,6 +27,15 @@ func GetDefaultMovieById(c *gin.Context) {
 }
 
 func BatchSaveMovie(c *gin.Context) {
+	var movies []model.Movie
+
+	c.Bind(&movies)
+
+	for _, v := range movies {
+		movieMap[v.Id] = v
+	}
+
+	c.JSON(http.StatusOK, "ok")
 
 }
 
