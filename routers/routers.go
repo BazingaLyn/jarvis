@@ -3,11 +3,12 @@ package routers
 import (
 	"github.com/BazingaLyn/jarvis/handlers"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 const APIBase = "api/v1/test"
 
-//noinspection GoUnresolvedReference
 func Routers() *gin.Engine {
 
 	router := gin.New()
@@ -18,8 +19,11 @@ func Routers() *gin.Engine {
 		v1.GET("/movie/:id", handlers.GetDefaultMovieById)
 		v1.POST("/save/movie", handlers.SaveMovie)
 		v1.POST("/batchSaveMovie", handlers.BatchSaveMovie)
-		v1.POST("/saveDirector/:movieId/:directorName", handlers.AddMovieDirector)
+		v1.POST("/saveDirector", handlers.AddMovieDirector)
 	}
+
+	url := ginSwagger.URL("http://localhost:10086/swagger/doc.json") // The url pointing to API definition
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	return router
 

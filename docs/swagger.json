@@ -1,0 +1,121 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "golang web项目",
+        "title": "jarvis swagger",
+        "contact": {
+            "name": "bazinga",
+            "url": "https://github.com/BazingaLyn",
+            "email": "lgl050712@163.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:10086",
+    "paths": {
+        "/batchSaveMovie": {
+            "post": {
+                "tags": [
+                    "电影"
+                ],
+                "summary": "批量保存电影信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Result"
+                        }
+                    }
+                }
+            }
+        },
+        "/movie": {
+            "get": {
+                "consumes": [
+                    "application/x-json-stream"
+                ],
+                "tags": [
+                    "电影"
+                ],
+                "summary": "获取所有的电影",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Result"
+                        }
+                    }
+                }
+            }
+        },
+        "/movie/": {
+            "get": {
+                "tags": [
+                    "电影"
+                ],
+                "summary": "根据电影id获取电影信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Result"
+                        }
+                    }
+                }
+            }
+        },
+        "/save/movie": {
+            "post": {
+                "tags": [
+                    "电影"
+                ],
+                "summary": "保存电影信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Result"
+                        }
+                    }
+                }
+            }
+        },
+        "/saveDirector/": {
+            "post": {
+                "tags": [
+                    "电影"
+                ],
+                "summary": "修改电影信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Result"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Result": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "请求信息"
+                }
+            }
+        }
+    }
+}
