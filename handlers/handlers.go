@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/BazingaLyn/jarvis/dao"
 	"github.com/BazingaLyn/jarvis/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -97,6 +98,22 @@ func SaveMovie(c *gin.Context) {
 	c.BindJSON(&movie)
 
 	movieMap[movie.Id] = movie
+
+	result := model.Result{
+		Code:    http.StatusOK,
+		Message: "success",
+		Data:    nil,
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func SaveElasticMovie(c *gin.Context) {
+	var elasticMovie model.ElasticMovie
+
+	c.BindJSON(&elasticMovie)
+
+	dao.Save(&elasticMovie)
 
 	result := model.Result{
 		Code:    http.StatusOK,

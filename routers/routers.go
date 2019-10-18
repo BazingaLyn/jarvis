@@ -18,6 +18,7 @@ func Routers() *gin.Engine {
 		v1.GET("/movie", handlers.GetAllMovie)
 		v1.GET("/movie/:id", handlers.GetDefaultMovieById)
 		v1.POST("/save/movie", handlers.SaveMovie)
+		v1.POST("/save/elastic/movie", handlers.SaveElasticMovie)
 		v1.POST("/batchSaveMovie", handlers.BatchSaveMovie)
 		v1.POST("/saveDirector", handlers.AddMovieDirector)
 	}

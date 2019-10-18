@@ -2,8 +2,11 @@ package main
 
 import (
 	_ "github.com/BazingaLyn/jarvis/docs"
+	"github.com/BazingaLyn/jarvis/middleware"
 	"github.com/BazingaLyn/jarvis/routers"
 )
+
+const isInit = true
 
 // @title jarvis swagger
 // @version 1.0
@@ -15,6 +18,11 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:10086
 func main() {
+
+	if isInit {
+		middleware.MovieExcelDataToDbInit()
+	}
+
 	r := routers.Routers()
 	r.Run(":10086")
 }
