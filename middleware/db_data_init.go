@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"github.com/BazingaLyn/jarvis/dao"
 	"github.com/BazingaLyn/jarvis/excel"
 	"github.com/BazingaLyn/jarvis/model"
 	"log"
@@ -24,13 +23,13 @@ func SaveMoviesToDb(ch <-chan []model.ElasticMovie) {
 			break
 		}
 
+		model.ElasticMovies = movies
+
 		for i, eachMovie := range movies {
 
 			log.Println(i)
 			log.Println(eachMovie)
-			if eachMovie.Id > 58736 {
-				dao.Save(&eachMovie)
-			}
+			eachMovie.Save()
 		}
 
 	}
