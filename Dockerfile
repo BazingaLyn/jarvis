@@ -2,7 +2,7 @@ FROM golang:1.13 as build
 
 
 ENV GO111MODULE=on
-ENV GOPROXY=https://mirrors.aliyun.com/goproxy/
+ENV GOPROXY=https://goproxy.cn
 
 
 WORKDIR /go/cache

@@ -15,6 +15,7 @@ func Routers() *gin.Engine {
 	v1 := router.Group(APIBase)
 	{
 		v1.GET("/movie", handlers.GetAllMovie)
+		v1.GET("/demo/movie", handlers.GetDemoMovie)
 		v1.GET("/movie/:id", handlers.GetDefaultMovieById)
 		v1.POST("/save/movie", handlers.SaveMovie)
 		v1.POST("/batchSaveMovie", handlers.BatchSaveMovie)

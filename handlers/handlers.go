@@ -20,6 +20,18 @@ func GetAllMovie(c *gin.Context) {
 
 }
 
+func GetDemoMovie(c *gin.Context) {
+	demoMovie := new(model.Movie)
+	demoMovie.Id = "1"
+	demoMovie.Name = "爱就这么简单"
+	demoMovie.Directors = []string{"张艺谋", "成功"}
+	demoMovie.Score = 97.2
+	demoMovie.MovieTime = 120
+	demoMovie.Actors = []string{"李连杰", "吕克贝松"}
+
+	c.JSON(http.StatusOK, demoMovie)
+}
+
 func GetDefaultMovieById(c *gin.Context) {
 	movieId := c.Param("id")
 	movie := movieMap[movieId]
