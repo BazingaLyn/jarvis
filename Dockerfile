@@ -8,7 +8,7 @@ ENV GOPROXY=https://goproxy.cn
 WORKDIR /go/cache
 
 ADD go.mod .
-ADD go.sum .
+#ADD go.sum .
 RUN go mod download
 
 WORKDIR /go/release

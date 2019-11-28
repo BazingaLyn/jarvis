@@ -1,14 +1,21 @@
 package main
 
 import (
-	"github.com/BazingaLyn/jarvis/routers"
+	"fmt"
+	"log"
+	"net/http"
 )
 
 func main() {
-	r := routers.Routers()
 
-	//url := ginSwagger.URL("http://localhost:10086/swagger/doc.json") // The url pointing to API definition
-	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	http.HandleFunc("/hello", hello)
+	err := http.ListenAndServe(":9090", nil)
+	if err != nil {
+		log.Fatal("ListenerAndServe:", err)
+		return
+	}
+}
 
-	r.Run(":10086")
+func hello(writer http.ResponseWriter, request *http.Request) {
+	fmt.Fprintf(writer, "hello web golang")
 }
