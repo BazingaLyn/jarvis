@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/", hello)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
 		log.Fatal("ListenerAndServe:", err)
@@ -17,5 +17,7 @@ func main() {
 }
 
 func hello(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(request.Method)
+	fmt.Println(request.RequestURI)
 	fmt.Fprintf(writer, "hello web golang")
 }
