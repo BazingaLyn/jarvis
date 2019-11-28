@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -23,6 +24,13 @@ func main() {
 
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/user", getUser)
+	//GET localhost:9090/save/user?id=3&name=bazinga&age=21
+	//POST localhost:9090/save/user
+	//{
+	//	"Id": 4,
+	//	"Name": "jarvis",
+	//	"Age": 22
+	//}
 	http.HandleFunc("/save/user", saveUser)
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {
@@ -53,7 +61,21 @@ func saveUser(writer http.ResponseWriter, request *http.Request) {
 			Age:  age,
 		}
 		users[id] = newUser
+		fmt.Fprintln(writer, "success")
+		return
+	}
 
+	if request.Method == "POST" {
+		bytes, _ := ioutil.ReadAll(request.Body)
+		saveUser := User{}
+		err := json.Unmarshal(bytes, &saveUser)
+
+		if err != nil {
+			panic("param is err")
+		}
+		users[saveUser.Id] = saveUser
+		fmt.Fprintln(writer, "success")
+		return
 	}
 
 }
