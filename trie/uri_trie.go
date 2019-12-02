@@ -2,8 +2,11 @@ package trie
 
 import "strings"
 
+var colonCharacter string = ":"
+
 type Node struct {
 	isLeaf   bool
+	wildcard bool
 	children map[string]*Node
 }
 
@@ -28,14 +31,30 @@ func (urlTrie *UriTrie) addNode(uri string) {
 	cur := urlTrie.Root
 	for _, path := range paths {
 		if len(path) != 0 {
-			childNode, ok := cur.children[path]
-			if !ok {
-				childNode = &Node{
-					children: make(map[string]*Node),
+
+			// 通配符处理 简单实现
+			isWildcard := isWildcard(path)
+			if isWildcard {
+				wildcardNode, ok := getChildWildcard(cur.children)
+				if !ok {
+					wildcardNode = &Node{
+						wildcard: true,
+						children: make(map[string]*Node),
+					}
+					cur.children[getCommonPath(path)] = wildcardNode
 				}
-				cur.children[path] = childNode
+				cur = wildcardNode
+
+			} else {
+				childNode, ok := cur.children[path]
+				if !ok {
+					childNode = &Node{
+						children: make(map[string]*Node),
+					}
+					cur.children[path] = childNode
+				}
+				cur = childNode
 			}
-			cur = childNode
 		}
 	}
 
@@ -44,6 +63,25 @@ func (urlTrie *UriTrie) addNode(uri string) {
 		urlTrie.Size++
 	}
 
+}
+
+func getCommonPath(path string) string {
+	return strings.TrimSuffix(path, ":")
+
+}
+
+func getChildWildcard(nodes map[string]*Node) (*Node, bool) {
+
+	for _, v := range nodes {
+		if v.wildcard {
+			return v, true
+		}
+	}
+	return nil, false
+}
+
+func isWildcard(path string) bool {
+	return strings.HasPrefix(path, colonCharacter)
 }
 
 func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
@@ -55,7 +93,13 @@ func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
 		if len(path) > 0 {
 			childNode, ok := cur.children[path]
 			if !ok {
-				return childNode, ok
+				wildcardNode, ok := getChildWildcard(cur.children)
+				if !ok {
+					return wildcardNode, ok
+				} else {
+					cur = wildcardNode
+					continue
+				}
 			}
 			cur = childNode
 		}
