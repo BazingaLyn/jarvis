@@ -1,14 +1,20 @@
 package trie
 
-import "strings"
+import (
+	"net/http"
+	"strings"
+)
 
 var colonCharacter string = ":"
 
+type Handle func(http.ResponseWriter, *http.Request)
+
 type Node struct {
-	isLeaf   bool
-	wildcard bool
-	params   map[string]string
-	children map[string]*Node
+	IsLeaf   bool
+	Wildcard bool
+	Handle   Handle
+	Params   map[string]string
+	Children map[string]*Node
 }
 
 type UriTrie struct {
@@ -19,13 +25,13 @@ type UriTrie struct {
 func NewTrie() UriTrie {
 	return UriTrie{
 		Root: &Node{
-			children: make(map[string]*Node),
+			Children: make(map[string]*Node),
 		},
 		Size: 0,
 	}
 }
 
-func (urlTrie *UriTrie) addNode(uri string) {
+func (urlTrie *UriTrie) AddNode(uri string, handler Handle) {
 
 	paths := strings.Split(uri, "/")
 
@@ -36,31 +42,32 @@ func (urlTrie *UriTrie) addNode(uri string) {
 			// 通配符处理 简单实现
 			isWildcard := isWildcard(path)
 			if isWildcard {
-				wildcardNode, _, ok := getChildWildcard(cur.children)
+				wildcardNode, _, ok := getChildWildcard(cur.Children)
 				if !ok {
 					wildcardNode = &Node{
-						wildcard: true,
-						children: make(map[string]*Node),
+						Wildcard: true,
+						Children: make(map[string]*Node),
 					}
-					cur.children[getCommonPath(path)] = wildcardNode
+					cur.Children[getCommonPath(path)] = wildcardNode
 				}
 				cur = wildcardNode
 
 			} else {
-				childNode, ok := cur.children[path]
+				childNode, ok := cur.Children[path]
 				if !ok {
 					childNode = &Node{
-						children: make(map[string]*Node),
+						Children: make(map[string]*Node),
 					}
-					cur.children[path] = childNode
+					cur.Children[path] = childNode
 				}
 				cur = childNode
 			}
 		}
 	}
 
-	if !cur.isLeaf {
-		cur.isLeaf = true
+	if !cur.IsLeaf {
+		cur.IsLeaf = true
+		cur.Handle = handler
 		urlTrie.Size++
 	}
 
@@ -74,7 +81,7 @@ func getCommonPath(path string) string {
 func getChildWildcard(nodes map[string]*Node) (*Node, string, bool) {
 
 	for k, v := range nodes {
-		if v.wildcard {
+		if v.Wildcard {
 			return v, k, true
 		}
 	}
@@ -85,7 +92,7 @@ func isWildcard(path string) bool {
 	return strings.HasPrefix(path, colonCharacter)
 }
 
-func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
+func (urlTrie *UriTrie) Search(uri string) (*Node, bool) {
 
 	paths := strings.Split(uri, "/")
 
@@ -94,9 +101,9 @@ func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
 
 	for _, path := range paths {
 		if len(path) > 0 {
-			childNode, ok := cur.children[path]
+			childNode, ok := cur.Children[path]
 			if !ok {
-				wildcardNode, paramName, ok := getChildWildcard(cur.children)
+				wildcardNode, paramName, ok := getChildWildcard(cur.Children)
 				if !ok {
 					return wildcardNode, ok
 				} else {
@@ -109,7 +116,7 @@ func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
 		}
 	}
 	if len(params) > 0 {
-		cur.params = params
+		cur.Params = params
 	}
-	return cur, cur.isLeaf
+	return cur, cur.IsLeaf
 }

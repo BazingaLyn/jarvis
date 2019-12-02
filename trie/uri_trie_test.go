@@ -9,10 +9,10 @@ import (
 func TestURITrieAdd(t *testing.T) {
 
 	trie := NewTrie()
-	trie.addNode("/user/add/1")
-	trie.addNode("/user/:id")
-	trie.addNode("/user/:id/:id3")
-	trie.addNode("/user/:id/:id2")
+	trie.AddNode("/user/add/1", nil)
+	trie.AddNode("/user/:id", nil)
+	trie.AddNode("/user/:id/:id3", nil)
+	trie.AddNode("/user/:id/:id2", nil)
 
 	fmt.Println(trie.Size)
 }
@@ -20,15 +20,15 @@ func TestURITrieAdd(t *testing.T) {
 func TestURITrieSearch(t *testing.T) {
 
 	trie := NewTrie()
-	trie.addNode("/user/add/1")
-	trie.addNode("/user/:id")
-	trie.addNode("/user/:id/:id3")
-	trie.addNode("/user/:id/:id2")
+	trie.AddNode("/user/add/1", nil)
+	trie.AddNode("/user/:id", nil)
+	trie.AddNode("/user/:id/:id3", nil)
+	trie.AddNode("/user/:id/:id2", nil)
 
-	node, exist := trie.search("/user/2/3")
+	node, exist := trie.Search("/user/2/3")
 	if exist {
 		fmt.Println("exist")
-		bytes, err := json.Marshal(node.params)
+		bytes, err := json.Marshal(node.Params)
 		if err == nil {
 			fmt.Println(string(bytes))
 		}
