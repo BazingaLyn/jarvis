@@ -7,6 +7,7 @@ var colonCharacter string = ":"
 type Node struct {
 	isLeaf   bool
 	wildcard bool
+	params   map[string]string
 	children map[string]*Node
 }
 
@@ -35,7 +36,7 @@ func (urlTrie *UriTrie) addNode(uri string) {
 			// 通配符处理 简单实现
 			isWildcard := isWildcard(path)
 			if isWildcard {
-				wildcardNode, ok := getChildWildcard(cur.children)
+				wildcardNode, _, ok := getChildWildcard(cur.children)
 				if !ok {
 					wildcardNode = &Node{
 						wildcard: true,
@@ -66,18 +67,18 @@ func (urlTrie *UriTrie) addNode(uri string) {
 }
 
 func getCommonPath(path string) string {
-	return strings.TrimSuffix(path, ":")
+	return strings.TrimPrefix(path, ":")
 
 }
 
-func getChildWildcard(nodes map[string]*Node) (*Node, bool) {
+func getChildWildcard(nodes map[string]*Node) (*Node, string, bool) {
 
-	for _, v := range nodes {
+	for k, v := range nodes {
 		if v.wildcard {
-			return v, true
+			return v, k, true
 		}
 	}
-	return nil, false
+	return nil, "", false
 }
 
 func isWildcard(path string) bool {
@@ -89,20 +90,26 @@ func (urlTrie *UriTrie) search(uri string) (*Node, bool) {
 	paths := strings.Split(uri, "/")
 
 	cur := urlTrie.Root
+	params := make(map[string]string)
+
 	for _, path := range paths {
 		if len(path) > 0 {
 			childNode, ok := cur.children[path]
 			if !ok {
-				wildcardNode, ok := getChildWildcard(cur.children)
+				wildcardNode, paramName, ok := getChildWildcard(cur.children)
 				if !ok {
 					return wildcardNode, ok
 				} else {
+					params[paramName] = path
 					cur = wildcardNode
 					continue
 				}
 			}
 			cur = childNode
 		}
+	}
+	if len(params) > 0 {
+		cur.params = params
 	}
 	return cur, cur.isLeaf
 }
