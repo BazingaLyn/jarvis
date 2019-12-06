@@ -2,20 +2,26 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/http"
+	"time"
 )
 
 func main() {
+	var Ball int
+	table := make(chan int)
+	go player("1", table)
+	go player("2", table)
 
-	http.HandleFunc("/hello", hello)
-	err := http.ListenAndServe(":9090", nil)
-	if err != nil {
-		log.Fatal("ListenerAndServe:", err)
-		return
-	}
+	table <- Ball
+	time.Sleep(1 * time.Second)
+	<-table
 }
 
-func hello(writer http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(writer, "hello web golang")
+func player(name string, table chan int) {
+	for {
+		fmt.Println("name is :" + name)
+		ball := <-table
+		ball++
+		time.Sleep(100 * time.Millisecond)
+		table <- ball
+	}
 }
