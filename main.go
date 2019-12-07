@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-var urlRouter trie.UriTrie = trie.NewTrie()
+var urlRouter = trie.NewTrie()
 
 var userMap = map[int]User{
 	1: User{
@@ -41,10 +41,19 @@ type User struct {
 }
 
 func getUserById(writer http.ResponseWriter, request *http.Request) {
-
-	query := request.URL.Query()
-	idStr := query["id"][0]
-	id, _ := strconv.Atoi(idStr)
+	method := request.Method
+	var id int
+	if method == "GET" {
+		query := request.URL.Query()
+		idStr := query["id"][0]
+		id, _ = strconv.Atoi(idStr)
+	} else if method == "POST" {
+		decoder := json.NewDecoder(request.Body)
+		var params map[string]string
+		decoder.Decode(&params)
+		s := params["id"]
+		id, _ = strconv.Atoi(s)
+	}
 	user := userMap[id]
 	bytes, err := json.Marshal(user)
 	if err == nil {
@@ -68,7 +77,7 @@ func router(writer http.ResponseWriter, request *http.Request) {
 				request.URL, _ = request.URL.Parse(nativeUrl.String() + "?" + query.Encode())
 			} else {
 				decoder := json.NewDecoder(request.Body)
-				var params map[string]string
+				params := make(map[string]string)
 				decoder.Decode(&params)
 				for k, v := range node.Params {
 					params[k] = v
