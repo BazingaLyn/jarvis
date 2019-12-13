@@ -19,8 +19,27 @@ func TestSQLParse(t *testing.T) {
 	case *sqlparser.Select:
 		sel := stmt.(*sqlparser.Select)
 		fmt.Println(sqlparser.String(sel.From))
-		fmt.Println(sel.Where.Expr)
-
+		expr := &sel.Where.Expr
+		handlerSelect(expr)
 	}
 
+}
+
+func handlerSelect(expr *sqlparser.Expr) {
+
+	switch (*expr).(type) {
+	case *sqlparser.AndExpr:
+		andExpr := (*expr).(*sqlparser.AndExpr)
+		leftExpr := andExpr.Left
+		rightExpr := andExpr.Right
+
+		fmt.Println(sqlparser.String(leftExpr))
+		fmt.Println(sqlparser.String(rightExpr))
+	case *sqlparser.ComparisonExpr:
+		comparisonExpr := (*expr).(*sqlparser.AndExpr)
+		Left := comparisonExpr.Left
+		Right := comparisonExpr.Right
+		fmt.Println(sqlparser.String(Left))
+		fmt.Println(sqlparser.String(Right))
+	}
 }
