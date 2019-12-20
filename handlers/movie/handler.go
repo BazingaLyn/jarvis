@@ -4,6 +4,7 @@ import (
 	"github.com/BazingaLyn/jarvis/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // @Summary 获取某个电影的信息
@@ -15,18 +16,16 @@ import (
 // @Router /movie/get/{id} [get]
 func GetMovieById(context *gin.Context) {
 
-	id := context.Param("id")
-
-	context.JSON(http.StatusOK, gin.H{
-		"result": model.Response{
-			Code: http.StatusOK,
-			Msg:  "success",
-			Data: model.Movie{
-				Id:   id,
-				Name: "大话西游",
-			},
-		},
-	})
+	idStr := context.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		context.JSON(http.StatusOK, model.Response{
+			Code: 2,
+			Msg:  "movie id should be int type",
+			Data: nil,
+		})
+		return
+	}
 
 }
 
@@ -39,39 +38,15 @@ func GetMovieById(context *gin.Context) {
 // @Router /movie/save [post]
 func SaveMovie(context *gin.Context) {
 
-	id := context.Param("id")
-
-	context.JSON(http.StatusOK, gin.H{
-		"result": model.Response{
-			Code: http.StatusOK,
-			Msg:  "success",
-			Data: model.Movie{
-				Id:   id,
-				Name: "大话西游",
-			},
-		},
-	})
 }
 
-// @Summary 保存电影信息
+// @Summary 根据id删除电影信息
 // @Tags 电影模块
 // @version 1.0
 // @Accept application/x-json-stream
-// @Param movie body model.Movie true "保存的电影基本信息"
+// @Param id path int true "要删除的电影id"
 // @Success 200 object model.Response 成功后返回值
 // @Router /movie/delete/{id} [get]
 func DeleteMovie(context *gin.Context) {
 
-	id := context.Param("id")
-
-	context.JSON(http.StatusOK, gin.H{
-		"result": model.Response{
-			Code: http.StatusOK,
-			Msg:  "success",
-			Data: model.Movie{
-				Id:   id,
-				Name: "大话西游",
-			},
-		},
-	})
 }
