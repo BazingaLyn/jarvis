@@ -1,9 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {},
-        "license": {}
+        "description": "gin开发实战接口列表",
+        "title": "gin实战",
+        "contact": {
+            "name": "API Support"
+        },
+        "license": {},
+        "version": "1.0"
     },
+    "host": "127.0.0.1:8080",
     "paths": {
         "/movie/get/{id}": {
             "get": {

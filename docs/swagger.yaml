@@ -8,9 +8,14 @@ definitions:
       msg:
         type: string
     type: object
+host: 127.0.0.1:8080
 info:
-  contact: {}
+  contact:
+    name: API Support
+  description: gin开发实战接口列表
   license: {}
+  title: gin实战
+  version: "1.0"
 paths:
   /movie/get/{id}:
     get:
