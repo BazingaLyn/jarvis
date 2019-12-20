@@ -16,4 +16,6 @@ func init() {
 	}
 	Db.SetMaxOpenConns(10)
 	Db.SetMaxIdleConns(10)
+
+	Db.Exec()
 }

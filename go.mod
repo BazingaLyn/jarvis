@@ -15,6 +15,7 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.3
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
+	github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2
 	golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582 // indirect
 	golang.org/x/tools v0.0.0-20191016232927-02335f11d598 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
