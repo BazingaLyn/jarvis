@@ -11,7 +11,66 @@
     },
     "host": "127.0.0.1:8080",
     "paths": {
-        "/movie/get/{id}": {
+        "/movie/batch/save": {
+            "post": {
+                "consumes": [
+                    "application/x-json-stream"
+                ],
+                "tags": [
+                    "电影模块"
+                ],
+                "summary": "批量保存电影信息",
+                "parameters": [
+                    {
+                        "description": "批量保存电影基本信息",
+                        "name": "movie",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Movie"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movie/delete/{id}": {
+            "get": {
+                "consumes": [
+                    "application/x-json-stream"
+                ],
+                "tags": [
+                    "电影模块"
+                ],
+                "summary": "根据id删除电影信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "要删除的电影id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/movie/query/{id}": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -38,9 +97,75 @@
                     }
                 }
             }
+        },
+        "/movie/save": {
+            "post": {
+                "consumes": [
+                    "application/x-json-stream"
+                ],
+                "tags": [
+                    "电影模块"
+                ],
+                "summary": "保存电影信息",
+                "parameters": [
+                    {
+                        "description": "保存的电影基本信息",
+                        "name": "movie",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Movie"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.Movie": {
+            "type": "object",
+            "properties": {
+                "actors": {
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "directors": {
+                    "type": "string"
+                },
+                "fileLength": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "languages": {
+                    "type": "string"
+                },
+                "movieName": {
+                    "type": "string"
+                },
+                "nations": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Response": {
             "type": "object",
             "properties": {

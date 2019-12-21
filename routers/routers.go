@@ -12,8 +12,9 @@ func Routers() *gin.Engine {
 	routers := gin.Default()
 	movieRouter := routers.Group("/movie")
 	{
-		movieRouter.GET("/:id", movie.GetMovieById)
+		movieRouter.GET("/query/:id", movie.GetMovieById)
 		movieRouter.POST("/save", movie.SaveMovie)
+		movieRouter.POST("/batch/save", movie.BatchSaveMovie)
 		movieRouter.GET("/delete/:id", movie.DeleteMovie)
 	}
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
