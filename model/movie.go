@@ -90,7 +90,7 @@ func (movie *Movie) GetMovieById() Movie {
 		&movieResults.Describe)
 
 	if err != nil {
-		if err != sql.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return movieResults
 		} else {
 			log.Panicln("select movie failed", err.Error())
