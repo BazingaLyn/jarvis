@@ -10,7 +10,7 @@ import (
 // @description gin开发实战接口列表
 
 // @contact.name API Support
-// @host localhost:8080
+// @host 47.98.164.130:8080
 // @BasePath
 func main() {
 	r := routers.Routers()

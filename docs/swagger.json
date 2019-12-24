@@ -9,7 +9,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "47.98.164.130:8080",
     "paths": {
         "/movie/batch/save": {
             "post": {
